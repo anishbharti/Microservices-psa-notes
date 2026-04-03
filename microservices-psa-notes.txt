@@ -134,7 +134,70 @@ Step to Install Zipikin Server:
 2. To run jar file : java -jar file-name
 3. Access that on port 9411
 
+==================================================================================================================================
+###### For My Understanding  #####chatgpt
+===================
+🧱 Step 1: Create Eureka Server
+Dependency (pom.xml)
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+</dependency>
+Main Class
+@SpringBootApplication
+@EnableEurekaServer
+public class EurekaServerApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaServerApplication.class, args);
+    }
+}
+application.yml
+server:
+  port: 8761
 
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+👉 Run this → open:
+
+http://localhost:8761
+🧱 Step 2: Create a Microservice (User Service)
+Dependency
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+
+application.yml
+spring:
+  application:
+    name: USER-SERVICE
+
+server:
+  port: 8081
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+👉 Start service → it registers in Eureka dashboard
+
+🧱 Step 3: Another Service (Order Service)
+spring:
+  application:
+    name: ORDER-SERVICE
+🔗 Calling Another Service
+
+Instead of:
+
+http://localhost:8081/user
+
+Use:
+
+http://USER-SERVICE/user
 
 #############################################
 First Microservices App
